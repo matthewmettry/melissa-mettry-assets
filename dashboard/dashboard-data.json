@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-05-20T19:09:34Z",
+  "account": {
+    "username": "melissamettryrealtor",
+    "media_count": 59,
+    "followers_count": 353,
+    "follows_count": 383,
+    "name": "Melissa Mettry, Realtor",
+    "profile_picture_url": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/61596577_1331955933621255_4568975098404405248_n.jpg?stp=dst-jpg_s206x206_tt6&_nc_cat=110&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=9iKICkai9oIQ7kNvwETFgkE&_nc_oc=AdrylYVdEbhAQ_k4v3pJaOoSZnBSJik_bPfHR_xoXDtGRtx1GBFzL7F9ju_bvfQvpyBzoUYqYZ9NpNZmVp2W3QiB&_nc_zt=24&_nc_ht=scontent-dfw5-1.cdninstagram.com&edm=AP4hL3IEAAAA&_nc_tpa=Q5bMBQFGezrdQFKNdFIutKGwm8wVI7irC4UHLFLFnkPMiaB4bDX6JcD3PQv9tXt_3H2JTf_upaj1INZ-Ag&oh=00_Af5FFKYawoJaGqdutIIiOukUJftgpGijT9GBQLyC6rd3rA&oe=6A13E2F7",
+    "id": "27082256191408034"
+  },
+  "posts": [
+    {
+      "post_id": "post-01-kitchen-2026-05-19",
+      "type": "carousel",
+      "posted_at_local": "2026-05-19T12:00:04",
+      "media_id": "17889534000480027",
+      "permalink": "https://www.instagram.com/p/DYgGjCaFJac/",
+      "title": "Most sellers think kitchen prep starts with a renovation.",
+      "head": {
+        "permalink": "https://www.instagram.com/p/DYgGjCaFJac/",
+        "timestamp": "2026-05-19T17:00:00+0000",
+        "media_type": "CAROUSEL_ALBUM",
+        "caption": "Most sellers think kitchen prep starts with a renovation.\n\nIt doesn't. It starts with one corner.\n\nThe one where the mail piles up. Where the toaster lives. Where the stand mixer hides. Every kitchen has it.\n\nClear that one corner \u2014 completely \u2014 and you change how a buyer reads the whole home. The difference between \"someone lives here\" and \"someone cares about this place.\"\n\nIt's also the cheapest thing on the prep list.\n\nIf you're thinking about selling in Highland Park, University Park, or Preston Hollow, send me the address. I'll walk through what I'd actually clear first \u2014 and what I wouldn't touch.\n\n#DallasRealEstate #DallasRealtor #HighlandParkTX #UniversityParkTX #ParkCitiesRealEstate #PrestonHollow #DallasLuxuryHomes #MelissaMettryRealEstate #SellerPrep",
+        "like_count": 17,
+        "comments_count": 1,
+        "media_url": "https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/700870169_18144653659500919_129701641366821878_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=fT6Lv9h09E8Q7kNvwFvse4v&_nc_oc=Adp1YagudBkc4NREJZjTpnOCJVceSahsVotQOfIdlitbYMpK0om4L8s6PV5nqmGdr1682XBmb4TE-zzBwHwaw-QU&_nc_zt=23&_nc_ht=scontent-dfw6-1.cdninstagram.com&edm=ANQ71j8EAAAA&_nc_gid=ZHwMxHKsY35BWqN8N4txLw&_nc_tpa=Q5bMBQGKz_AHAF7v-Zoo7d6UmP4mMWQFEe-0THtYzam2VOr1kHMk8QGFn5hFBImIgTWuaMTYYUDijqPjKQ&oh=00_Af4oGyzPrQm5dADl03sk3NgVhbIIZIPgybDzjBXNT-92kw&oe=6A13CF97",
+        "id": "17889534000480027",
+        "metrics": {
+          "reach": 84,
+          "saved": 0,
+          "shares": 0,
+          "total_interactions": 18,
+          "views": 189
+        }
+      },
+      "cover_url": "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-01/1-slide-rendered.jpg"
+    }
+  ],
+  "pending": [
+    {
+      "post_id": "post-02-renovation-2026-05-22",
+      "caption_preview": "The most expensive seller mistake I see in Park Cities homes isn't choosing the wrong agent.\n\nIt's the renovation that didn't need to happen.\n\nA $40K kitchen 60 days before listing rarely returns $40K. The buyer sees a clean kitchen \u2014 not a story of dollars spent. The appraisal s",
+      "image_urls": [
+        "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-02/1-slide-rendered.jpg",
+        "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-02/2-slide-rendered.jpg",
+        "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-02/3-slide-rendered.jpg"
+      ],
+      "container_id": null,
+      "container_status": "not_prepared",
+      "expires_at": null
+    }
+  ],
+  "summary": {
+    "total_posts_published": 1,
+    "total_posts_pending": 1,
+    "next_scheduled": "2026-05-22 12:00 CDT"
+  }
+}

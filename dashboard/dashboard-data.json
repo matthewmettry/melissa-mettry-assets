@@ -157,7 +157,7 @@
       }
     }
   ],
-  "ntfy_topic": "melissa-mettry-feedback-b67874f5fae7cff9",
+  "feedback_endpoint": null,
   "summary": {
     "total_posts_published": 1,
     "total_posts_pending": 1,

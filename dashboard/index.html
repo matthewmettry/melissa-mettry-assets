@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -6,7 +6,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Melissa" />
-<title>Melissa Mettry — Command Center</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<meta name="theme-color" content="#b38b4d" />
+<title>Melissa Mettry | Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
@@ -81,20 +84,21 @@
 <div class="wrap">
 
 <header>
+  <img src="../melissa-mettry-logo.png" style="height:44px; margin-bottom:14px; display:block;" alt="Melissa Mettry | Douglas Elliman" />
   <div>
     <span class="gold-rule"></span>
     <div class="sub">Command Center</div>
     <h1>Melissa Mettry</h1>
   </div>
-  <div class="updated">Last refresh: <span id="updated">—</span><br /><span id="stale-warn" style="color:#c8743f;font-weight:600;display:none">⚠ data may be stale</span></div>
+  <div class="updated">Last refresh: <span id="updated">â€”</span><br /><span id="stale-warn" style="color:#c8743f;font-weight:600;display:none">âš  data may be stale</span></div>
 </header>
 
 <section>
   <div class="kpis" id="account-kpis">
-    <div class="kpi" style="border:1px solid var(--gold)"><div class="label">Pending verdicts</div><div class="v" id="kpi-pending">—</div></div>
-    <div class="kpi"><div class="label">Pipeline published</div><div class="v" id="kpi-pipeline">—</div></div>
-    <div class="kpi"><div class="label">Followers</div><div class="v" id="kpi-followers">—</div></div>
-    <div class="kpi"><div class="label">Total posts</div><div class="v" id="kpi-posts">—</div></div>
+    <div class="kpi" style="border:1px solid var(--gold)"><div class="label">Pending verdicts</div><div class="v" id="kpi-pending">â€”</div></div>
+    <div class="kpi"><div class="label">Pipeline published</div><div class="v" id="kpi-pipeline">â€”</div></div>
+    <div class="kpi"><div class="label">Followers</div><div class="v" id="kpi-followers">â€”</div></div>
+    <div class="kpi"><div class="label">Total posts</div><div class="v" id="kpi-posts">â€”</div></div>
   </div>
 </section>
 
@@ -116,7 +120,7 @@
 
 <section>
   <h2><span class="gold-rule"></span>Send Claude a note</h2>
-  <p class="sub" style="margin-bottom:14px">Anything that isn't a verdict — a sphere update, DM question, idea. Picked up within 30 min.</p>
+  <p class="sub" style="margin-bottom:14px">Anything that isn't a verdict â€” a sphere update, DM question, idea. Picked up within 30 min.</p>
   <div style="background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow)">
     <textarea id="general-message" class="notes" placeholder="Anything on your mind."></textarea>
     <button class="btn ship" onclick="sendGeneralMessage(this)">Send</button>
@@ -135,7 +139,7 @@
 let DATA = null;
 const FEEDBACK_KEY_STORAGE = "melissa_feedback_key";
 
-function fmt(n){ if(n===null||n===undefined) return "—"; return n.toLocaleString(); }
+function fmt(n){ if(n===null||n===undefined) return "â€”"; return n.toLocaleString(); }
 function escapeHtml(s){ return (s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
 function showToast(msg, ms=2400){
@@ -189,7 +193,7 @@ async function submitVerdict(postId, verdict, btn){
   if (verdict === "REVISE" && !notes){
     ta?.focus();
     ta?.classList.add("notes-need");
-    showToast("Add a note — what should change?", 3500);
+    showToast("Add a note â€” what should change?", 3500);
     return;
   }
   ta?.classList.remove("notes-need");
@@ -199,7 +203,7 @@ async function submitVerdict(postId, verdict, btn){
   // Show in-flight state on this button only, not the whole card
   const origText = btn.textContent;
   btn.disabled = true;
-  btn.textContent = "Sending…";
+  btn.textContent = "Sendingâ€¦";
 
   try {
     await postFeedback(payload);
@@ -213,12 +217,12 @@ async function submitVerdict(postId, verdict, btn){
 
     // Visual confirmation, but keep the card active so Melissa can correct or add more.
     showToast(`Sent: ${verdict}${notes ? " + notes" : ""}`);
-    btn.textContent = "✓ " + origText;
+    btn.textContent = "âœ“ " + origText;
     btn.disabled = false;
     setTimeout(() => { btn.textContent = origText; }, 2500);
     if (ta && verdict === "REVISE") ta.value = "";  // clear after a revise submission
   } catch (e) {
-    showToast("Send failed — try again.");
+    showToast("Send failed â€” try again.");
     btn.textContent = origText;
     btn.disabled = false;
   }
@@ -231,7 +235,7 @@ async function sendGeneralMessage(btn){
   if (!notes){ ta.focus(); ta.classList.add("notes-need"); showToast("Type your message first.", 3000); return; }
   ta.classList.remove("notes-need");
   const payload = { verdict: "MESSAGE", post_id: "(general)", notes, submitted_at: new Date().toISOString() };
-  btn.disabled = true; btn.textContent = "Sending…";
+  btn.disabled = true; btn.textContent = "Sendingâ€¦";
   try {
     await postFeedback(payload);
     const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
@@ -240,10 +244,10 @@ async function sendGeneralMessage(btn){
     renderVerdicts();
     showToast("Sent to Claude.");
     ta.value = "";
-    btn.textContent = "✓ Sent";
+    btn.textContent = "âœ“ Sent";
     setTimeout(() => { btn.textContent = "Send"; btn.disabled = false; }, 2200);
   } catch(e) {
-    showToast("Send failed — try again.");
+    showToast("Send failed â€” try again.");
     btn.textContent = "Send"; btn.disabled = false;
   }
 }
@@ -318,7 +322,7 @@ function render(d){
   // Pending
   const pHost = document.getElementById("pending-cards");
   if(!d.pending.length){
-    pHost.innerHTML = `<div class="empty">No posts awaiting verdict. Next scheduled: ${d.summary.next_scheduled || "—"}</div>`;
+    pHost.innerHTML = `<div class="empty">No posts awaiting verdict. Next scheduled: ${d.summary.next_scheduled || "â€”"}</div>`;
   } else {
     pHost.innerHTML = d.pending.map(p => `
       <div class="card" data-post-id="${escapeHtml(p.post_id)}">
@@ -327,15 +331,15 @@ function render(d){
           <span class="badge pending">Pending</span>
           <h3 class="title">${escapeHtml(p.caption_preview.split("\\n")[0].slice(0,80))}</h3>
           <div class="meta">${escapeHtml(p.post_id)}</div>
-          <pre class="caption">${escapeHtml(p.caption_preview)}…</pre>
+          <pre class="caption">${escapeHtml(p.caption_preview)}â€¦</pre>
           <label class="notes-label">Your feedback (required for Revise)</label>
-          <textarea class="notes" placeholder="e.g., 'change the cover photo to a different kitchen shot', 'tone reads too soft', 'remove the neighborhood line', 'slide 2 text is too long'…"></textarea>
+          <textarea class="notes" placeholder="e.g., 'change the cover photo to a different kitchen shot', 'tone reads too soft', 'remove the neighborhood line', 'slide 2 text is too long'â€¦"></textarea>
           <div class="actions">
             <button class="btn ship" onclick="submitVerdict('${escapeHtml(p.post_id)}','SHIP',this)">Ship it</button>
-            <button class="btn gold" onclick="submitVerdict('${escapeHtml(p.post_id)}','REVISE',this)">Revise…</button>
+            <button class="btn gold" onclick="submitVerdict('${escapeHtml(p.post_id)}','REVISE',this)">Reviseâ€¦</button>
             <button class="btn hold" onclick="submitVerdict('${escapeHtml(p.post_id)}','HOLD',this)">Hold</button>
           </div>
-          <p style="font-size:12px;color:#6b6b6b;margin:10px 0 0">Tip: you can send another verdict any time — the most recent one wins.</p>
+          <p style="font-size:12px;color:#6b6b6b;margin:10px 0 0">Tip: you can send another verdict any time â€” the most recent one wins.</p>
         </div>
       </div>`).join("");
   }
@@ -358,7 +362,7 @@ function render(d){
         <div class="body">
           ${deleted ? `<span class="badge deleted">Deleted</span>` : `<span class="badge live">Live</span>`}
           <h3 class="title"><a href="${h.permalink}" target="_blank" style="color:inherit;text-decoration:none">${escapeHtml(p.title || p.post_id)}</a></h3>
-          <div class="meta">${new Date(h.timestamp || p.posted_at_local).toLocaleString()} · ${p.type || "post"}</div>
+          <div class="meta">${new Date(h.timestamp || p.posted_at_local).toLocaleString()} Â· ${p.type || "post"}</div>
           ${deleted ? `<div class="meta">Deleted ${p.deleted_at ? new Date(p.deleted_at).toLocaleString() : ""}</div>
           ${p.delete_reason ? `<div style="margin:8px 0 4px;color:#9f2d20;font-size:13px">${escapeHtml(p.delete_reason)}</div>` : ""}` : ""}
           <div class="stats">

@@ -53,7 +53,13 @@
   .badge.hold{background:#6b6b6b;color:#fff}
   .empty{color:var(--muted);font-style:italic;font-family:var(--serif);font-size:16px}
   pre.caption{font-family:var(--sans);font-size:13px;color:#333;line-height:1.55;white-space:pre-wrap;background:#f6f4ee;padding:12px;border-radius:6px;margin:0 0 10px}
-  textarea.notes{width:100%;min-height:64px;border:1px solid var(--rule);border-radius:6px;padding:10px;font-family:inherit;font-size:13px;resize:vertical;background:#fdfcfa;margin-bottom:10px}
+  textarea.notes{width:100%;min-height:84px;border:1px solid var(--rule);border-radius:6px;padding:10px;font-family:inherit;font-size:13px;resize:vertical;background:#fdfcfa;margin-bottom:6px;transition:border-color .2s, box-shadow .2s}
+  textarea.notes:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,169,124,.2)}
+  textarea.notes.notes-need{border-color:#c8743f;box-shadow:0 0 0 3px rgba(200,116,63,.18)}
+  .notes-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px}
+  .inline-history{margin-top:14px;padding-top:14px;border-top:1px dashed var(--rule)}
+  .inline-history .inline-verdict{padding:8px 0;border-bottom:1px dotted var(--rule)}
+  .inline-history .inline-verdict:last-child{border-bottom:none}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100}
   .toast.show{opacity:1}
   .verdict-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:flex-start;font-size:13px}
@@ -127,11 +133,25 @@ function showToast(msg, ms=2400){
 async function submitVerdict(postId, verdict, btn){
   if (!DATA || !DATA.ntfy_topic){ showToast("Feedback channel not configured."); return; }
   const card = btn.closest(".card");
-  const notes = card.querySelector("textarea.notes")?.value || "";
+  const ta = card.querySelector("textarea.notes");
+  const notes = (ta?.value || "").trim();
+
+  // Revise requires a note so we know what to change.
+  if (verdict === "REVISE" && !notes){
+    ta?.focus();
+    ta?.classList.add("notes-need");
+    showToast("Add a note — what should change?", 3500);
+    return;
+  }
+  ta?.classList.remove("notes-need");
+
   const payload = { verdict, post_id: postId, notes, submitted_at: new Date().toISOString() };
-  // Lock buttons during send
-  card.querySelectorAll("button.btn").forEach(b => b.disabled = true);
-  showToast("Sending…");
+
+  // Show in-flight state on this button only, not the whole card
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Sending…";
+
   try {
     const r = await fetch(`https://ntfy.sh/${DATA.ntfy_topic}`, {
       method: "POST",
@@ -139,20 +159,42 @@ async function submitVerdict(postId, verdict, btn){
       headers: { "Content-Type":"text/plain" }
     });
     if (!r.ok){ throw new Error("HTTP " + r.status); }
-    showToast(`Verdict sent: ${verdict}`);
-    // Optimistically add to local recent verdicts list
+
+    // Local optimistic log
     const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
     local.unshift({ ...payload, _local:true });
-    localStorage.setItem("verdicts_local", JSON.stringify(local.slice(0,20)));
+    localStorage.setItem("verdicts_local", JSON.stringify(local.slice(0,40)));
     renderVerdicts();
-    // Disable card after a verdict is sent
-    card.style.opacity = "0.55";
-    card.querySelector(".badge").className = "badge " + verdict.toLowerCase();
-    card.querySelector(".badge").textContent = verdict + " sent";
+    appendInlineHistory(card, payload);
+
+    // Visual confirmation, but keep the card active so Melissa can correct or add more.
+    showToast(`Sent: ${verdict}${notes ? " + notes" : ""}`);
+    btn.textContent = "✓ " + origText;
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = origText; }, 2500);
+    if (ta && verdict === "REVISE") ta.value = "";  // clear after a revise submission
   } catch (e) {
     showToast("Send failed — try again.");
-    card.querySelectorAll("button.btn").forEach(b => b.disabled = false);
+    btn.textContent = origText;
+    btn.disabled = false;
   }
+}
+
+function appendInlineHistory(card, payload){
+  let host = card.querySelector(".inline-history");
+  if (!host){
+    host = document.createElement("div");
+    host.className = "inline-history";
+    card.querySelector(".body").appendChild(host);
+  }
+  const row = document.createElement("div");
+  row.className = "inline-verdict";
+  const when = new Date(payload.submitted_at).toLocaleTimeString();
+  const cls = (payload.verdict || "").toLowerCase();
+  row.innerHTML = `<span class="badge ${cls}">${payload.verdict}</span>
+    <span style="color:#6b6b6b;font-size:12px;margin-left:8px">${when}</span>
+    ${payload.notes ? `<div style="margin-top:4px;font-size:13px;color:#333">${payload.notes.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}</div>` : ""}`;
+  host.prepend(row);
 }
 
 function renderVerdicts(){
@@ -213,12 +255,14 @@ function render(d){
           <h3 class="title">${escapeHtml(p.caption_preview.split("\\n")[0].slice(0,80))}</h3>
           <div class="meta">${escapeHtml(p.post_id)}</div>
           <pre class="caption">${escapeHtml(p.caption_preview)}…</pre>
-          <textarea class="notes" placeholder="Optional notes (e.g., 'change slide 2 photo', 'tone is too soft')"></textarea>
+          <label class="notes-label">Your feedback (required for Revise)</label>
+          <textarea class="notes" placeholder="e.g., 'change the cover photo to a different kitchen shot', 'tone reads too soft', 'remove the neighborhood line', 'slide 2 text is too long'…"></textarea>
           <div class="actions">
             <button class="btn ship" onclick="submitVerdict('${escapeHtml(p.post_id)}','SHIP',this)">Ship it</button>
             <button class="btn gold" onclick="submitVerdict('${escapeHtml(p.post_id)}','REVISE',this)">Revise…</button>
             <button class="btn hold" onclick="submitVerdict('${escapeHtml(p.post_id)}','HOLD',this)">Hold</button>
           </div>
+          <p style="font-size:12px;color:#6b6b6b;margin:10px 0 0">Tip: you can send another verdict any time — the most recent one wins.</p>
         </div>
       </div>`).join("");
   }

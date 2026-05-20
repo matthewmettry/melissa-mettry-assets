@@ -1,0 +1,1 @@
+﻿{ "name": "Melissa Mettry Command Center", "short_name": "Melissa", "start_url": "index.html", "display": "standalone", "background_color": "#faf9f7", "theme_color": "#b38b4d", "icons": [ { "src": "../melissa-mettry-logo.png", "sizes": "1024x1024", "type": "image/png" } ] }

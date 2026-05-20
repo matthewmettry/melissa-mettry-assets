@@ -103,6 +103,12 @@
 </section>
 
 <section>
+  <h2><span class="gold-rule"></span>Quick decisions Claude is waiting on</h2>
+  <p class="sub" style="margin-bottom:14px">Tap a button to answer. Or type a freeform reply.</p>
+  <div id="decision-cards"></div>
+</section>
+
+<section>
   <h2><span class="gold-rule"></span>Pending your verdict</h2>
   <p class="sub" style="margin-bottom:14px">Tap a verdict and (optionally) add notes. Submits instantly to the pipeline.</p>
   <div id="pending-cards" class="cards"></div>
@@ -306,6 +312,85 @@ async function load(){
   render(DATA);
 }
 
+async function answerDecision(decisionId, choice, btn){
+  if (!DATA || !DATA.feedback_endpoint){ showToast("Channel not configured."); return; }
+  const card = btn.closest(".decision-card");
+  const freeform = (card.querySelector("textarea")?.value || "").trim();
+  const finalNotes = freeform || "(no extra notes)";
+  const payload = { verdict: "MESSAGE", post_id: `decision:${decisionId}`, notes: `[${choice}] ${finalNotes}`, submitted_at: new Date().toISOString() };
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const r = await fetch(DATA.feedback_endpoint, { method:"POST", body: JSON.stringify(payload), headers:{"Content-Type":"text/plain"} });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
+    local.unshift({ ...payload, _local:true });
+    localStorage.setItem("verdicts_local", JSON.stringify(local.slice(0,40)));
+    renderVerdicts();
+    showToast(`Sent: ${choice}`);
+    card.querySelectorAll("button").forEach(b => b.disabled = true);
+    card.style.opacity = "0.6";
+    card.querySelector(".decision-status").textContent = "✓ Answered: " + choice;
+  } catch(e){
+    showToast("Send failed — try again.");
+    btn.textContent = orig; btn.disabled = false;
+  }
+}
+
+const DECISIONS = [
+  {
+    id: "bio-pick",
+    question: "Which IG bio do you want? (See bio-refresh.md for full copy.)",
+    choices: ["Option 1 — Funnel-Driver", "Option 2 — Hyper-Local Advisor", "Option 3 — Personality-Forward"],
+    freeform_hint: "Or rewrite it your own way…"
+  },
+  {
+    id: "banker-true",
+    question: "Are you actually a former private banker? (Gemini sourced this, we want to confirm before leaning on it.)",
+    choices: ["Yes, true — lean in", "No — strip it from positioning"],
+    freeform_hint: "(Optional context)"
+  },
+  {
+    id: "sphere-names",
+    question: "Sphere reactivation — biggest revenue lever. Want me to send you a private form to type 25 names tonight?",
+    choices: ["Yes, send the form", "I'll fill the CSV myself", "Remind me Friday"],
+    freeform_hint: "(Or paste a name or two here to start)"
+  },
+  {
+    id: "post-02-direction",
+    question: "Post-02 (renovation) is held — you sent REVISE 3 times. Want me to rebuild it or skip to Post-03?",
+    choices: ["Rebuild Post-02 with my notes", "Skip — move to Post-03 (kitchen photo prep)"],
+    freeform_hint: "(Any extra direction for the rebuild)"
+  }
+];
+
+function renderDecisions(){
+  const host = document.getElementById("decision-cards");
+  const answered = new Set();
+  // Hide decisions she's already answered (presence of any verdict with matching post_id)
+  const remote = (DATA && DATA.feedback) || [];
+  const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
+  for (const v of [...remote, ...local]) {
+    if (v.post_id && v.post_id.startsWith("decision:")) {
+      answered.add(v.post_id.substring("decision:".length));
+    }
+  }
+  const open = DECISIONS.filter(d => !answered.has(d.id));
+  if (!open.length){
+    host.innerHTML = `<div class="empty">All caught up. No open decisions.</div>`;
+    return;
+  }
+  host.innerHTML = open.map(d => `
+    <div class="decision-card" style="background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px">
+      <h3 style="font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.3;margin:0 0 14px">${escapeHtml(d.question)}</h3>
+      <div class="actions" style="border-top:none;padding-top:0;margin-top:0;margin-bottom:12px">
+        ${d.choices.map(c => `<button class="btn ship" onclick="answerDecision('${d.id}','${escapeHtml(c).replace(/'/g,"&#39;")}',this)">${escapeHtml(c)}</button>`).join("")}
+      </div>
+      <textarea class="notes" placeholder="${escapeHtml(d.freeform_hint)}"></textarea>
+      <div class="decision-status" style="color:var(--muted);font-size:12px;margin-top:6px"></div>
+    </div>`).join("");
+}
+
 function render(d){
   document.getElementById("updated").textContent = new Date(d.generated_at).toLocaleString();
   // Stale-data warning: data older than 90 min or push failure
@@ -345,6 +430,7 @@ function render(d){
   }
 
   renderVerdicts();
+  renderDecisions();
 
   // Live posts
   const lHost = document.getElementById("live-cards");

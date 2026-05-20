@@ -93,6 +93,16 @@
 </section>
 
 <section>
+  <h2><span class="gold-rule"></span>Send Claude a note</h2>
+  <p class="sub" style="margin-bottom:14px">Anything that isn't a verdict — a sphere update, DM question, idea, complaint. Picked up on the next check (within 30 min).</p>
+  <div style="background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow)">
+    <textarea id="general-message" class="notes" placeholder="Anything on your mind — 'just got a DM from a HP seller, what do I say?', 'add option 11 to the topic list', 'pause posts next week, I'm out of town', etc."></textarea>
+    <button class="btn ship" onclick="sendGeneralMessage(this)">Send</button>
+    <span style="color:#6b6b6b;font-size:12px;margin-left:12px">Goes straight to Claude.</span>
+  </div>
+</section>
+
+<section>
   <h2><span class="gold-rule"></span>Pending your verdict</h2>
   <p class="sub" style="margin-bottom:14px">Tap a verdict and (optionally) add notes. Submits instantly to the pipeline.</p>
   <div id="pending-cards" class="cards"></div>
@@ -177,6 +187,35 @@ async function submitVerdict(postId, verdict, btn){
     showToast("Send failed — try again.");
     btn.textContent = origText;
     btn.disabled = false;
+  }
+}
+
+async function sendGeneralMessage(btn){
+  if (!DATA || !DATA.ntfy_topic){ showToast("Channel not configured."); return; }
+  const ta = document.getElementById("general-message");
+  const notes = (ta.value || "").trim();
+  if (!notes){ ta.focus(); ta.classList.add("notes-need"); showToast("Type your message first.", 3000); return; }
+  ta.classList.remove("notes-need");
+  const payload = { verdict: "MESSAGE", post_id: "(general)", notes, submitted_at: new Date().toISOString() };
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const r = await fetch(`https://ntfy.sh/${DATA.ntfy_topic}`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type":"text/plain" }
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
+    local.unshift({ ...payload, _local:true });
+    localStorage.setItem("verdicts_local", JSON.stringify(local.slice(0,40)));
+    renderVerdicts();
+    showToast("Sent to Claude.");
+    ta.value = "";
+    btn.textContent = "✓ Sent";
+    setTimeout(() => { btn.textContent = "Send"; btn.disabled = false; }, 2200);
+  } catch(e) {
+    showToast("Send failed — try again.");
+    btn.textContent = "Send"; btn.disabled = false;
   }
 }
 

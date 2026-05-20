@@ -14,7 +14,7 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
   .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
-  header{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:18px;margin-bottom:28px}
+  header{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:18px;margin-bottom:28px;gap:16px;flex-wrap:wrap}
   h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:34px;margin:0;letter-spacing:.2px}
   .sub{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.12em}
   .gold-rule{display:inline-block;width:32px;height:2px;background:var(--gold);margin-bottom:6px}
@@ -39,15 +39,27 @@
   .card .stat{font-size:12px;color:var(--muted)}
   .card .stat strong{display:block;color:var(--ink);font-family:var(--serif);font-size:20px;font-weight:400}
   .card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
-  .btn{padding:8px 14px;border-radius:6px;font-size:13px;text-decoration:none;display:inline-block;border:1px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer}
+  .btn{padding:9px 14px;border-radius:6px;font-size:13px;text-decoration:none;display:inline-block;border:1px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;font-family:inherit}
   .btn.ship{background:var(--ink);color:#fff;border-color:var(--ink)}
   .btn.gold{border-color:var(--gold);color:var(--gold)}
+  .btn.hold{border-color:var(--muted);color:var(--muted)}
   .btn:hover{opacity:.85}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
   .badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;text-transform:uppercase;letter-spacing:.1em}
   .badge.live{background:#1a1a1a;color:#fff}
   .badge.pending{background:var(--gold);color:#fff}
+  .badge.ship{background:#1e7a3a;color:#fff}
+  .badge.revise{background:#c6a97c;color:#fff}
+  .badge.hold{background:#6b6b6b;color:#fff}
   .empty{color:var(--muted);font-style:italic;font-family:var(--serif);font-size:16px}
   pre.caption{font-family:var(--sans);font-size:13px;color:#333;line-height:1.55;white-space:pre-wrap;background:#f6f4ee;padding:12px;border-radius:6px;margin:0 0 10px}
+  textarea.notes{width:100%;min-height:64px;border:1px solid var(--rule);border-radius:6px;padding:10px;font-family:inherit;font-size:13px;resize:vertical;background:#fdfcfa;margin-bottom:10px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100}
+  .toast.show{opacity:1}
+  .verdict-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:flex-start;font-size:13px}
+  .verdict-row:last-child{border-bottom:none}
+  .verdict-row .when{color:var(--muted);min-width:130px;font-size:12px}
+  .verdict-row .what{flex:1}
   footer{margin-top:60px;color:var(--muted);font-size:12px;text-align:center}
   footer a{color:var(--muted)}
 </style>
@@ -69,14 +81,20 @@
   <div class="kpis" id="account-kpis">
     <div class="kpi"><div class="label">Followers</div><div class="v" id="kpi-followers">—</div></div>
     <div class="kpi"><div class="label">Total posts</div><div class="v" id="kpi-posts">—</div></div>
-    <div class="kpi"><div class="label">Posts published by pipeline</div><div class="v" id="kpi-pipeline">—</div></div>
+    <div class="kpi"><div class="label">Pipeline published</div><div class="v" id="kpi-pipeline">—</div></div>
     <div class="kpi"><div class="label">Pending verdicts</div><div class="v" id="kpi-pending">—</div></div>
   </div>
 </section>
 
 <section>
   <h2><span class="gold-rule"></span>Pending your verdict</h2>
+  <p class="sub" style="margin-bottom:14px">Tap a verdict and (optionally) add notes. Submits instantly to the pipeline.</p>
   <div id="pending-cards" class="cards"></div>
+</section>
+
+<section>
+  <h2><span class="gold-rule"></span>Recent verdicts you've sent</h2>
+  <div id="verdict-list" style="background:var(--card);border-radius:8px;padding:18px;box-shadow:var(--shadow)"></div>
 </section>
 
 <section>
@@ -86,28 +104,92 @@
 
 <footer>
   <p>Auto-refreshes every 30 minutes. Tap any post link to open on Instagram.</p>
-  <p>Project source: <a href="https://github.com/matthewmettry/melissa-mettry-reels">matthewmettry/melissa-mettry-reels</a> (private) · Public assets: this repo</p>
 </footer>
 
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const APPROVAL_EMAIL = "mmmettry@gmail.com";
-const SUBJ_PREFIX = "[VERDICT]";
+let DATA = null;
 
 function fmt(n){ if(n===null||n===undefined) return "—"; return n.toLocaleString(); }
 function escapeHtml(s){ return (s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-function mailtoLink(verdict, postId){
-  const subject = encodeURIComponent(`${SUBJ_PREFIX} ${verdict}: ${postId}`);
-  const body = encodeURIComponent(`Verdict: ${verdict}\nPost: ${postId}\n\nNotes:\n`);
-  return `mailto:${APPROVAL_EMAIL}?subject=${subject}&body=${body}`;
+
+function showToast(msg, ms=2400){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove("show"), ms);
+}
+
+async function submitVerdict(postId, verdict, btn){
+  if (!DATA || !DATA.ntfy_topic){ showToast("Feedback channel not configured."); return; }
+  const card = btn.closest(".card");
+  const notes = card.querySelector("textarea.notes")?.value || "";
+  const payload = { verdict, post_id: postId, notes, submitted_at: new Date().toISOString() };
+  // Lock buttons during send
+  card.querySelectorAll("button.btn").forEach(b => b.disabled = true);
+  showToast("Sending…");
+  try {
+    const r = await fetch(`https://ntfy.sh/${DATA.ntfy_topic}`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type":"text/plain" }
+    });
+    if (!r.ok){ throw new Error("HTTP " + r.status); }
+    showToast(`Verdict sent: ${verdict}`);
+    // Optimistically add to local recent verdicts list
+    const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
+    local.unshift({ ...payload, _local:true });
+    localStorage.setItem("verdicts_local", JSON.stringify(local.slice(0,20)));
+    renderVerdicts();
+    // Disable card after a verdict is sent
+    card.style.opacity = "0.55";
+    card.querySelector(".badge").className = "badge " + verdict.toLowerCase();
+    card.querySelector(".badge").textContent = verdict + " sent";
+  } catch (e) {
+    showToast("Send failed — try again.");
+    card.querySelectorAll("button.btn").forEach(b => b.disabled = false);
+  }
+}
+
+function renderVerdicts(){
+  const host = document.getElementById("verdict-list");
+  const remote = (DATA && DATA.feedback) || [];
+  const local = JSON.parse(localStorage.getItem("verdicts_local") || "[]");
+  // Merge by id-ish key
+  const all = [...local];
+  for (const r of remote){
+    if (!all.some(x => x.post_id === r.post_id && x.verdict === r.verdict && Math.abs(new Date(x.submitted_at || x.received_at) - new Date(r.received_at)) < 5*60*1000)){
+      all.push(r);
+    }
+  }
+  all.sort((a,b) => new Date(b.received_at || b.submitted_at) - new Date(a.received_at || a.submitted_at));
+  if (!all.length){
+    host.innerHTML = `<div class="empty">No verdicts sent yet.</div>`;
+    return;
+  }
+  host.innerHTML = all.slice(0,15).map(v => {
+    const when = new Date(v.received_at || v.submitted_at).toLocaleString();
+    const cls = (v.verdict || "").toLowerCase();
+    return `<div class="verdict-row">
+      <div class="when">${when}</div>
+      <div class="what">
+        <span class="badge ${cls}">${escapeHtml(v.verdict || "?")}</span>
+        <strong style="margin-left:8px">${escapeHtml(v.post_id || "?")}</strong>
+        ${v.notes ? `<div style="margin-top:4px;color:#555">${escapeHtml(v.notes)}</div>` : ""}
+      </div>
+    </div>`;
+  }).join("");
 }
 
 async function load(){
   const r = await fetch(`dashboard-data.json?t=${Date.now()}`);
   if(!r.ok){ document.body.insertAdjacentHTML("afterbegin","<p style='padding:20px;color:red'>Failed to load dashboard data.</p>"); return; }
-  const d = await r.json();
-  render(d);
+  DATA = await r.json();
+  render(DATA);
 }
 
 function render(d){
@@ -124,21 +206,24 @@ function render(d){
     pHost.innerHTML = `<div class="empty">No posts awaiting verdict. Next scheduled: ${d.summary.next_scheduled || "—"}</div>`;
   } else {
     pHost.innerHTML = d.pending.map(p => `
-      <div class="card">
+      <div class="card" data-post-id="${escapeHtml(p.post_id)}">
         <div class="cover" style="background-image:url('${p.image_urls[0]}')"></div>
         <div class="body">
           <span class="badge pending">Pending</span>
           <h3 class="title">${escapeHtml(p.caption_preview.split("\\n")[0].slice(0,80))}</h3>
           <div class="meta">${escapeHtml(p.post_id)}</div>
           <pre class="caption">${escapeHtml(p.caption_preview)}…</pre>
+          <textarea class="notes" placeholder="Optional notes (e.g., 'change slide 2 photo', 'tone is too soft')"></textarea>
           <div class="actions">
-            <a class="btn ship" href="${mailtoLink("SHIP", p.post_id)}">Ship it</a>
-            <a class="btn gold" href="${mailtoLink("REVISE", p.post_id)}">Revise…</a>
-            <a class="btn" href="${mailtoLink("HOLD", p.post_id)}">Hold</a>
+            <button class="btn ship" onclick="submitVerdict('${escapeHtml(p.post_id)}','SHIP',this)">Ship it</button>
+            <button class="btn gold" onclick="submitVerdict('${escapeHtml(p.post_id)}','REVISE',this)">Revise…</button>
+            <button class="btn hold" onclick="submitVerdict('${escapeHtml(p.post_id)}','HOLD',this)">Hold</button>
           </div>
         </div>
       </div>`).join("");
   }
+
+  renderVerdicts();
 
   // Live posts
   const lHost = document.getElementById("live-cards");
@@ -170,7 +255,6 @@ function render(d){
   }
 }
 load();
-// Auto-refetch every 5 minutes (data file is refreshed every 30 min by the cron)
 setInterval(load, 5*60*1000);
 </script>
 </body>

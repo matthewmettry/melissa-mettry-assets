@@ -256,5 +256,10 @@
     "total_posts_pending": 2,
     "total_verdicts": 18,
     "next_scheduled": "2026-05-22 12:00 CDT"
+  },
+  "_meta": {
+    "last_push_ok": true,
+    "last_push_error": null,
+    "stamped_at": "2026-05-21T14:15:00+00:00"
   }
 }

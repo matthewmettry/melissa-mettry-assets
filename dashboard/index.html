@@ -31,7 +31,7 @@
   section{margin-bottom:42px}
   h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:22px;margin:0 0 16px;color:var(--ink)}
   h2 .gold-rule{display:block;margin-bottom:8px}
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
   @media(max-width:680px){.kpis{grid-template-columns:repeat(2,1fr)}}
   .kpi{background:var(--card);padding:18px;border-radius:8px;box-shadow:var(--shadow)}
   .kpi .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
@@ -96,6 +96,7 @@
 <section>
   <div class="kpis" id="account-kpis">
     <div class="kpi" style="border:1px solid var(--gold)"><div class="label">Pending verdicts</div><div class="v" id="kpi-pending">â€”</div></div>
+    <div class="kpi" id="kpi-token-card"><div class="label">Meta token days</div><div class="v" id="kpi-token">â€”</div><div class="updated" id="token-warn" style="color:#c8743f;font-weight:600;display:none">needs attention</div></div>
     <div class="kpi"><div class="label">Pipeline published</div><div class="v" id="kpi-pipeline">â€”</div></div>
     <div class="kpi"><div class="label">Followers</div><div class="v" id="kpi-followers">â€”</div></div>
     <div class="kpi"><div class="label">Total posts</div><div class="v" id="kpi-posts">â€”</div></div>
@@ -403,6 +404,12 @@ function render(d){
   document.getElementById("kpi-posts").textContent = fmt(acc.media_count);
   document.getElementById("kpi-pipeline").textContent = fmt(d.summary.total_posts_published);
   document.getElementById("kpi-pending").textContent = fmt(d.summary.total_posts_pending);
+  const token = d.token_health || {};
+  const tokenDays = token.days_until_expiry;
+  document.getElementById("kpi-token").textContent = tokenDays === null || tokenDays === undefined ? "â€”" : Number(tokenDays).toFixed(1);
+  const tokenNeedsAttention = token.token_dead || token.status === "ERROR" || (typeof tokenDays === "number" && tokenDays < 14);
+  document.getElementById("kpi-token-card").style.border = tokenNeedsAttention ? "2px solid #c8743f" : "1px solid var(--rule)";
+  document.getElementById("token-warn").style.display = tokenNeedsAttention ? "block" : "none";
 
   // Pending
   const pHost = document.getElementById("pending-cards");

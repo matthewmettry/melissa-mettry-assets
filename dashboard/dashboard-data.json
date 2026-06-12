@@ -1,7 +1,13 @@
 {
-  "generated_at": "2026-06-12T14:15:00Z",
+  "generated_at": "2026-06-12T14:45:27Z",
   "account": {
-    "_error": "HTTP Error 500: Internal Server Error"
+    "username": "melissamettryrealtor",
+    "media_count": 66,
+    "followers_count": 437,
+    "follows_count": 423,
+    "name": "Melissa Mettry, Realtor",
+    "profile_picture_url": "https://scontent-dfw5-1.cdninstagram.com/v/t51.2885-19/61596577_1331955933621255_4568975098404405248_n.jpg?stp=dst-jpg_s206x206_tt6&_nc_cat=110&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=mm3-2bZCwKEQ7kNvwGnT_-_&_nc_oc=AdoYvkkALGo3-Qbv1cZmIcPaLj8UtuUv9_NPmvxyAK1KThDKpfr8LJD3omPwyOteFy4dPww2uYnb5dfvmk0mEfQn&_nc_zt=24&_nc_ht=scontent-dfw5-1.cdninstagram.com&edm=AP4hL3IEAAAA&_nc_tpa=Q5bMBQH-gsLMgG2SGqQ0D_AOMcftRo2g1j5cH2fOlrK8qmLNkB4FiC3IzYBXw_FSAltIVfqpuaxufzZi5g&oh=00_Af9W9FjcTS6dFXejOh9GlOjBa455Lvl8wcqVkS3uvwvGeg&oe=6A31FD37",
+    "id": "27082256191408034"
   },
   "posts": [
     {
@@ -12,13 +18,13 @@
       "permalink": "https://www.instagram.com/p/DYgGjCaFJac/",
       "title": "Most sellers think kitchen prep starts with a renovation.",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
-          "saved": null,
+          "saved": 0,
           "shares": null,
-          "total_interactions": null,
-          "views": null
+          "total_interactions": 23,
+          "views": 349
         }
       },
       "cover_url": "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-01/1-slide-rendered.jpg"
@@ -33,8 +39,8 @@
       "head": {
         "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
-          "reach": null,
-          "saved": null,
+          "reach": 0,
+          "saved": 0,
           "shares": null,
           "total_interactions": null,
           "views": null
@@ -50,11 +56,18 @@
       "permalink": "https://www.instagram.com/p/DY3YmXdDF8-/",
       "title": "Buying and selling at the same time can feel overwhelming \u2014 especially in Park C",
       "head": {
-        "_error": "HTTP Error 500: Internal Server Error",
+        "permalink": "https://www.instagram.com/p/DY3YmXdDF8-/",
+        "timestamp": "2026-05-28T02:21:33+0000",
+        "media_type": "CAROUSEL_ALBUM",
+        "caption": "Buying and selling at the same time can feel overwhelming \u2014 especially in Park Cities, where the next home is rarely on the market when you need it. \ud83c\udfe1\n\nI put together a short guide for sellers who are also buyers. How I time the two transactions, what I check before either home lists, and how I keep you out of \"bridge loan or scrambling for a rental\" territory.\n\nIf a move is on your radar, message me your timeline. This is a good place to start.\n\n#DallasRealEstate #DallasRealtor #HighlandParkTX #UniversityParkTX #ParkCitiesRealEstate #PrestonHollow #DallasLuxuryHomes #MelissaMettryRealEstate",
+        "like_count": 46,
+        "comments_count": 1,
+        "media_url": "https://scontent-dfw5-2.cdninstagram.com/v/t51.82787-15/707454059_18145557754500919_4866092699958498560_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMiJ9&_nc_ohc=rKdqoauTs5MQ7kNvwElgu6O&_nc_oc=Adp3MsBcJHUbeKDKC1mXjLpv-uGeKNK6l_h29mFFZltcceuSyzdLnVcpEqX0-275ia7O7jfRYdk9-w8pIi_NBEZ5&_nc_zt=23&_nc_ht=scontent-dfw5-2.cdninstagram.com&edm=ANQ71j8EAAAA&_nc_gid=hPgPEr3I1FeRxG8oCjc-UQ&_nc_tpa=Q5bMBQFBc4jezX8DT0ArubhXhDpAbqYq1Svrw8XOh9B0OBM8MSM4NxHOG_z-YEdc7-DHZcE-L6YtLkP50w&oh=00_Af9bHt05HTYuWI3FUgQOQpfXIxo850qy8xefX3qj9eN0ew&oe=6A31F1A4",
+        "id": "18004543199869094",
         "metrics": {
           "reach": null,
-          "saved": null,
-          "shares": null,
+          "saved": 1,
+          "shares": 1,
           "total_interactions": null,
           "views": null
         }
@@ -69,13 +82,13 @@
       "permalink": "https://www.instagram.com/p/DY7ejz3FJpq/",
       "title": "Most moves to Dallas start with one question: where? \ud83e\udd0d",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
-          "shares": null,
+          "shares": 0,
           "total_interactions": null,
-          "views": null
+          "views": 283
         }
       },
       "cover_url": "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-04/1-slide-rendered.jpg"
@@ -94,7 +107,7 @@
           "saved": null,
           "shares": null,
           "total_interactions": null,
-          "views": null
+          "views": 345
         }
       },
       "cover_url": "https://raw.githubusercontent.com/matthewmettry/melissa-mettry-assets/main/post-05/1-portrait.jpg"
@@ -107,10 +120,17 @@
       "permalink": "https://www.instagram.com/p/DZNgFNfkZQ2/",
       "title": "Most of the work of selling a house happens before there's a price. \ud83e\udd0d",
       "head": {
-        "_error": "HTTP Error 500: Internal Server Error",
+        "permalink": "https://www.instagram.com/p/DZNgFNfkZQ2/",
+        "timestamp": "2026-06-05T16:59:59+0000",
+        "media_type": "IMAGE",
+        "caption": "Most of the work of selling a house happens before there's a price. \ud83e\udd0d\n\nWhen a family is thinking about listing, the first thing I want to know isn't what they paid for it or what their neighbor sold for. It's what's actually driving the move. A kid starting somewhere new. A parent who shouldn't be alone anymore. A career pivot they haven't said out loud yet. The reason behind the move shapes the strategy more than the spreadsheet does.\n\nI want to know who's in the room when they make this decision \u2014 the spouse, the financial advisor, the adult kids who don't live in town anymore. The quiet vetoers are usually the ones who slow a deal in week six.\n\nI want to know what the next house looks like, because a move-up runs at a different speed than a move-out-of-state. I want to know what \"I made the right call\" would feel like to them, ninety days from now. For some families that's a number. For others it's a closing date, a school start, or knowing the neighbor didn't get a discount.\n\nAnd I want to know the worst version of how this could go. Inspections that surface something real. An appraisal that comes in low. The buyer who walks at the last minute. We name them out loud at the beginning. They have less power over a sale once they're in the room.\n\nIf a sale is somewhere on your horizon \u2014 a few months or a year out \u2014 let's have that conversation early. It costs nothing.\n\n#DallasRealEstate #DallasRealtor #HighlandParkTX #UniversityParkTX #ParkCitiesRealEstate #PrestonHollow #DallasLuxuryHomes #MelissaMettryRealEstate",
+        "like_count": 8,
+        "comments_count": 2,
+        "media_url": "https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/718151118_18146427913500919_1566671177689393525_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=105&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=CcNHTwCGn9AQ7kNvwFfzopn&_nc_oc=AdrNIVq4_7HVM0HmyOVjahzW--JhpIGmaIy_Tx8u13QKxJr26hPIUXxtcJ3F9OCZCtNA95Ivu3cglHltvxdXhv8f&_nc_zt=23&_nc_ht=scontent-dfw5-1.cdninstagram.com&edm=ANQ71j8EAAAA&_nc_gid=t_MsG2Wjegvsz8VOAz0_Wg&_nc_tpa=Q5bMBQF-n3FWKBO3edITkV-5B8J4g2boa7oC99SRm8A2qscbVCJr0C9tsf3lgFbvJgZh3_pcdDlSg1fcUw&oh=00_Af9pJsLxhalSSx1WVvgaN7cMyGE8K8EruliNceUE4NOYnA&oe=6A31EC03",
+        "id": "17973545091048731",
         "metrics": {
           "reach": null,
-          "saved": null,
+          "saved": 1,
           "shares": null,
           "total_interactions": null,
           "views": null
@@ -526,7 +546,7 @@
     "days_until_expiry": 60.0,
     "expires_in": 5184000,
     "checked_at": "2026-06-12T08:00:02",
-    "observed_at": "2026-06-12T14:15:00Z",
+    "observed_at": "2026-06-12T14:45:27Z",
     "token_dead": false,
     "message": "OK alive=True insights=True days_until_expiry=60.0 expires_in=5184000",
     "expires_at": "2026-08-11T08:00:02"

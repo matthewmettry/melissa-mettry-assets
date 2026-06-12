@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-12T13:45:01Z",
+  "generated_at": "2026-06-12T14:15:00Z",
   "account": {
-    "_error": "HTTP Error 400: Bad Request"
+    "_error": "HTTP Error 500: Internal Server Error"
   },
   "posts": [
     {
@@ -31,7 +31,7 @@
       "permalink": "https://www.instagram.com/p/DYm4M2XlHbQ/",
       "title": "The most expensive seller mistake I see in Park Cities homes isn't choosing the ",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
@@ -50,7 +50,7 @@
       "permalink": "https://www.instagram.com/p/DY3YmXdDF8-/",
       "title": "Buying and selling at the same time can feel overwhelming \u2014 especially in Park C",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
@@ -88,7 +88,7 @@
       "permalink": "https://www.instagram.com/p/DZI1YSVkkmJ/",
       "title": "Before real estate, I spent years in private banking. \ud83e\udd0d",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
@@ -107,7 +107,7 @@
       "permalink": "https://www.instagram.com/p/DZNgFNfkZQ2/",
       "title": "Most of the work of selling a house happens before there's a price. \ud83e\udd0d",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
@@ -126,7 +126,7 @@
       "permalink": "https://www.instagram.com/p/DZVOd4gFAUg/",
       "title": "Save this \u2014 Dallas in June, the short list. \ud83e\udd0d",
       "head": {
-        "_error": "HTTP Error 400: Bad Request",
+        "_error": "HTTP Error 500: Internal Server Error",
         "metrics": {
           "reach": null,
           "saved": null,
@@ -526,7 +526,7 @@
     "days_until_expiry": 60.0,
     "expires_in": 5184000,
     "checked_at": "2026-06-12T08:00:02",
-    "observed_at": "2026-06-12T13:45:01Z",
+    "observed_at": "2026-06-12T14:15:00Z",
     "token_dead": false,
     "message": "OK alive=True insights=True days_until_expiry=60.0 expires_in=5184000",
     "expires_at": "2026-08-11T08:00:02"

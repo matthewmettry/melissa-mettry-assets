@@ -638,5 +638,10 @@
     "total_verdicts": 30,
     "token_days_until_expiry": 60.0,
     "next_scheduled": "2026-05-22 12:00 CDT"
+  },
+  "_meta": {
+    "last_push_ok": false,
+    "last_push_error": "Command '['git', '-C', 'C:\\\\Users\\\\Owner\\\\melissa-mettry-assets-tmp', 'push']' returned non-zero exit status 1.",
+    "stamped_at": "2026-06-19T19:17:21+00:00"
   }
 }

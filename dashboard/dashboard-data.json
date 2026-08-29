@@ -934,5 +934,10 @@
     "total_verdicts": 43,
     "token_days_until_expiry": 60.0,
     "next_scheduled": "2026-05-22 12:00 CDT"
+  },
+  "_meta": {
+    "last_push_ok": true,
+    "last_push_error": null,
+    "stamped_at": "2026-08-29T01:14:38+00:00"
   }
 }

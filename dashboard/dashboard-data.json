@@ -922,5 +922,10 @@
     "total_verdicts": 43,
     "token_days_until_expiry": 60.0,
     "next_scheduled": "2026-09-04 12:00 CDT - post-26-three-questions-before-touring-2026-09-04"
+  },
+  "_meta": {
+    "last_push_ok": true,
+    "last_push_error": null,
+    "stamped_at": "2026-08-29T01:16:35+00:00"
   }
 }
